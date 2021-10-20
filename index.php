@@ -1,5 +1,8 @@
 <?php
 
+echo 'HI from users_api';
+die();
+
 session_start();
 
 use aktivgo\chat\app\Activation;
