@@ -5,5 +5,6 @@ create table if not exists users
     password varchar(255) not null,
     fullName varchar(255) null,
     email varchar(255) null,
-    confirmed boolean null default false
+    confirmed boolean null default false,
+    avatar varchar(255) null
 );
