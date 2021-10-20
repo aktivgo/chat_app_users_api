@@ -3,7 +3,6 @@
 session_start();
 
 use aktivgo\chat\app\Activation;
-use aktivgo\chat\app\UserController;
 use aktivgo\chat\app\HttpResponse;
 use aktivgo\chat\database\Database;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -15,19 +14,16 @@ use Symfony\Component\HttpFoundation\Request;
 require_once __DIR__ . "/composer/vendor/autoload.php";
 
 try {
-    // Роут для /users
-    $routeUsers = new Route('/users');
-    // Роут для /users/id
-    $routeUsersId = new Route('/users/{id}', [], ['id' => '\\d+']);
-    // Роут для подтверждения почты
+    $routeSignin = new Route('/signin');
+    $routeSignup = new Route('/signup');
+    $routeLogout = new Route('/logout');
     $routeUsersActivation = new Route('/users/activation');
-    $routeIndexTemplate = new Route('/');
 
     $routes = new RouteCollection();
-    $routes->add('getUsers', $routeUsers);
-    $routes->add('getUser', $routeUsersId);
+    $routes->add('signin', $routeSignin);
+    $routes->add('signup', $routeSignup);
+    $routes->add('logout', $routeLogout);
     $routes->add('userActivation', $routeUsersActivation);
-    $routes->add('index', $routeIndexTemplate);
 
     $context = new RequestContext();
     $context->fromRequest(Request::createFromGlobals());
@@ -50,40 +46,17 @@ if ($parameters['_route'] === 'userActivation') {
     return;
 }
 
-if($parameters['_route'] === 'index') {
-    require_once 'templates/index-template.php';
+if($parameters['_route'] === 'signin') {
+    require_once 'includes/signin.php';
     return;
 }
 
-$data = file_get_contents('php://input');
-$data = json_decode($data, true);
-
-if (!$parameters['id']) {
-    if ($context->getMethod() === 'GET') {
-        UserController::getUsers($db, $_GET);
-        return;
-    }
-    if ($context->getMethod() === 'POST') {
-        UserController::addUser($db, $data);
-        return;
-    }
-
-    HttpResponse::toSendResponse(['The request is incorrect'], 404);
+if($parameters['_route'] === 'signup') {
+    require_once 'includes/signup.php';
     return;
 }
 
-if ($context->getMethod() === 'GET') {
-    UserController::getUserById($db, $parameters['id']);
-    return;
-}
-
-if ($context->getMethod() === 'PUT') {
-    $data['id'] = $parameters['id'];
-    UserController::updateUser($db, $data);
-    return;
-}
-
-if ($context->getMethod() === 'DELETE') {
-    UserController::deleteUser($db, $parameters['id']);
+if($parameters['_route'] === 'logout') {
+    require_once 'includes/logout.php';
     return;
 }

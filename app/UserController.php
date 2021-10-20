@@ -60,6 +60,9 @@ class UserController
     // Добавляет пользователя в БД
     public static function addUser(PDO $db, ?array $data)
     {
+        if (self::isLoginExist($db, $data['login'])) {
+            HttpResponse::toSendResponse(['Такой логин уже существует'],406);
+        }
         self::checkData($data);
 
         $sth = $db->prepare("insert into users values (null, :firstName, :lastName, :email, false)");
@@ -73,46 +76,12 @@ class UserController
         HttpResponse::toSendResponse([$id],201);
     }
 
-    // Обновляет информацию о пользователе в БД
-    public static function updateUser(PDO $db, array $data)
-    {
-        self::checkData($data);
-        self::checkId($db, $data['id']);
-
-        $sth = $db->prepare("update users set firstName = :firstName, lastName = :lastName, email = :email where id = :id");
-        $sth->execute($data);
-
-        HttpResponse::toSendResponse([], 202);
-    }
-
-    // Удаляет пользователя из БД
-    public static function deleteUser(PDO $db, string $id)
-    {
-        $sth = $db->prepare("delete from users where id = :id");
-        $sth->execute(['id' => $id]);
-
-        HttpResponse::toSendResponse([],204);
-    }
-
     // Проверяет наличие пользователя с данным логином в БД
     public static function isLoginExist(PDO $db, string $login): bool
     {
         $st = $db->prepare("select * from users where login = :login");
         $st->execute(['login' => $login]);
         return $st->fetch(PDO::FETCH_ASSOC);
-    }
-
-    // Проверяет существование id в БД
-    private static function checkId(PDO $db, string $id)
-    {
-        $sth = $db->prepare("select * from users where id = :id");
-        $sth->execute(['id' => $id]);
-        $res = $sth->fetch(PDO::FETCH_ASSOC);
-
-        if (!$res) {
-            HttpResponse::toSendResponse(['User not found'], 404);
-            die();
-        }
     }
 
     // Проверяет массив данных на корректность
