@@ -75,6 +75,15 @@ class UserController
         HttpResponse::toSendResponse([$id],201);
     }
 
+    // Удаляет пользователя из БД
+    public static function deleteUser(PDO $db, string $id)
+    {
+        $sth = $db->prepare("delete from users where id = :id");
+        $sth->execute(['id' => $id]);
+
+        HttpResponse::toSendResponse([],204);
+    }
+
     // Проверяет наличие пользователя с данным логином в БД
     public static function isLoginExist(PDO $db, string $login): bool
     {

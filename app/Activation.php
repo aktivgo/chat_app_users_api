@@ -15,7 +15,7 @@ class Activation
     {
         $token = [
             'id' => $id,
-            'lifeTime' => time() + 100000
+            'lifeTime' => time() + 300
         ];
         return JWT::encode($token, $_ENV['KEY']);
     }
@@ -52,12 +52,12 @@ class Activation
             $mail->Subject = 'Подтвердите регистрацию на сайте';
 
             $baseUrl = $_SERVER['NGINX_HOST'];
-            $body = '<H1> Здравствуйте! </H1> <br/> Чтобы подтвердить регистрацию на нашем сайте, пожалуйста, пройдите по <a href="' . 'http://' . $baseUrl . '/users/activation?token=' . $token . '"> ссылке </a> . <br> Если это были не Вы, то просто игнорируйте это письмо. <br/> <br/> <strong>Внимание!</strong> Ссылка действительна 24 часа.';
+            $body = '<H1> Здравствуйте! </H1> <br/> Чтобы подтвердить регистрацию на нашем сайте, пожалуйста, пройдите по <a href="' . 'http://' . $baseUrl . '/users/activation?token=' . $token . '"> ссылке </a> . <br> Если это были не Вы, то просто игнорируйте это письмо. <br/> <br/> <strong>Внимание!</strong> Ссылка действительна 5 минут.';
             $mail->msgHTML($body);
 
             $mail->send();
         } catch (Exception $e) {
-            UserController::echoResponseCode([], 404);
+            HttpResponse::toSendResponse([], 404);
             die();
         }
     }
@@ -70,24 +70,24 @@ class Activation
         $db = Database::getConnection();
 
         // Если подтверждённый пользователь снова переходит по ссылке
-        $sth = $db->prepare("select * from users where id = :id and status = true");
+        $sth = $db->prepare("select * from users where id = :id and confirmed = true");
         $sth->execute(['id' => $id]);
         if ($sth->fetch(PDO::FETCH_ASSOC)) {
-            UserController::echoResponseCode(['The mail has already been confirmed'], 200);
+            HttpResponse::toSendResponse(['The mail has already been confirmed'], 200);
             die();
         }
 
         // Если время жизни токена закончилось, удаляем пользователя
         if ($data->lifeTime <= time()) {
             UserController::deleteUser(Database::getConnection(), $id);
-            UserController::echoResponseCode(['The token is invalid'], 204);
+            HttpResponse::toSendResponse(['The token is invalid'], 204);
             die();
         }
 
         // Подтверждение почты
-        $sth = $db->prepare("update users set status = true where id = :id");
+        $sth = $db->prepare("update users set confirmed = true where id = :id");
         if ($sth->execute(['id' => $id])) {
-            UserController::echoResponseCode(['The mail has been successfully confirmed'], 200);
+            HttpResponse::toSendResponse(['The mail has been successfully confirmed'], 200);
         }
     }
 }
