@@ -15,11 +15,11 @@ $passwordConfirm = $_POST['passwordConfirm'];
 $db = Database::getConnection();
 
 if (UserController::isLoginExist($db, $login)) {
-    $response = [
+    HttpResponse::toSendResponse([
+        'status' => false,
         'message' => 'Такой логин уже существует',
         'fields' => ['login']
-    ];
-    HttpResponse::toSendResponse($response, 400);
+    ], 400);
     die();
 }
 
@@ -38,16 +38,19 @@ if ($passwordConfirm === '') {
 }
 
 if (!empty($errorFields)) {
-    $response = [
+    HttpResponse::toSendResponse([
+        'status' => false,
         'message' => 'Проверьте правильность полей',
         'fields' => $errorFields
-    ];
-    HttpResponse::toSendResponse($response, 400);
+    ], 400);
     die();
 }
 
 if ($password != $passwordConfirm) {
-    HttpResponse::toSendResponse(['Пароли не совпадают'], 400);
+    HttpResponse::toSendResponse([
+        'status' => false,
+        'message' => 'Пароли не совпадают'
+    ], 400);
     die();
 }
 
@@ -60,4 +63,8 @@ UserController::addUser($db, [
     'password' => $password
 ]);
 
-HttpResponse::toSendResponse([], 200);
+
+HttpResponse::toSendResponse([
+    'status' => true,
+    'message' => 'Регистрация прошла успешно'
+    ], 200);

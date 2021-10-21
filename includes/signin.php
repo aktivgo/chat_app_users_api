@@ -18,11 +18,11 @@ if ($password === '') {
 }
 
 if (!empty($errorFields)) {
-    $response = [
+    HttpResponse::toSendResponse([
+        'status' => false,
         'message' => "Проверьте правильность полей",
         'fields' => $errorFields
-    ];
-    HttpResponse::toSendResponse($response, 400);
+    ], 400);
     die();
 }
 
@@ -36,4 +36,7 @@ $_SESSION['user'] = [
     'email' => $user['email']
 ];
 
-HttpResponse::toSendResponse([], 200);
+HttpResponse::toSendResponse([
+    'status' => true,
+    'message' => 'Вход выполнен успешно'
+    ], 200);

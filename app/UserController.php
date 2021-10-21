@@ -49,11 +49,12 @@ class UserController
         $res = $sth->fetch(PDO::FETCH_ASSOC);
 
         if (!$res) {
-            HttpResponse::toSendResponse(['Неверный логин или пароль'], 404);
+            HttpResponse::toSendResponse([
+                'status' => false,
+                'message' => 'Неверный логин или пароль'
+            ], 404);
             die();
         }
-
-        HttpResponse::toSendResponse($res, 200);
         return $res;
     }
 
@@ -63,9 +64,12 @@ class UserController
         $sth = $db->prepare("insert into users values (null,:fullName, :avatar, :login, :password)");
         $sth->execute($data);
 
-        $id = $db->lastInsertId();
+        HttpResponse::toSendResponse([
+            'status' => true,
+            'id' => $db->lastInsertId(),
+            'message' => 'Регистрация прошла успешно'
+        ], 201);
 
-        HttpResponse::toSendResponse([$id], 201);
     }
 
     // Проверяет наличие пользователя с данным логином в БД
