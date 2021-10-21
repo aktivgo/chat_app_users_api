@@ -7,9 +7,8 @@ use aktivgo\chat\app\UserController;
 use aktivgo\chat\database\Database;
 
 $fullName = $_POST['fullName'];
-$login = $_POST['login'];
-$email = $_POST['email'];
 $avatar = null;
+$login = $_POST['login'];
 $password = $_POST['password'];
 $passwordConfirm = $_POST['passwordConfirm'];
 
@@ -30,9 +29,6 @@ if ($fullName === '') {
 }
 if ($login === '') {
     $errorFields[] = 'login';
-}
-if ($email != '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errorFields[] = 'email';
 }
 if ($password === '') {
     $errorFields[] = 'password';
@@ -59,10 +55,9 @@ $password = md5($password);
 
 UserController::addUser($db, [
     'fullName' => $fullName,
-    'login' => $login,
-    'email' => $email,
     'avatar' => $avatar,
-    'password' => $password,
+    'login' => $login,
+    'password' => $password
 ]);
 
-HttpResponse::toSendResponse(['Регистрация прошла успешно'], 200);
+HttpResponse::toSendResponse([], 200);
