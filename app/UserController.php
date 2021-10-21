@@ -63,7 +63,6 @@ class UserController
         if (self::isLoginExist($db, $data['login'])) {
             HttpResponse::toSendResponse(['Такой логин уже существует'],406);
         }
-        self::checkData($data);
 
         $sth = $db->prepare("insert into users values (null, :firstName, :lastName, :email, false)");
         $sth->execute($data);
@@ -82,30 +81,5 @@ class UserController
         $st = $db->prepare("select * from users where login = :login");
         $st->execute(['login' => $login]);
         return $st->fetch(PDO::FETCH_ASSOC);
-    }
-
-    // Проверяет массив данных на корректность
-    private static function checkData(?array $data)
-    {
-        if (!isset($data)) {
-            HttpResponse::toSendResponse(['The input data is incorrect'], 400);
-            die();
-        }
-        if (!isset($data['firstName'])) {
-            HttpResponse::toSendResponse(['The \'firstName\' field is incorrect'], 400);
-            die();
-        }
-        if (!isset($data['lastName'])) {
-            HttpResponse::toSendResponse(['The \'lastName\' field is incorrect'], 400);
-            die();
-        }
-        if (!isset($data['email'])) {
-            HttpResponse::toSendResponse(['The \'email\' field is incorrect'], 400);
-            die();
-        }
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            HttpResponse::toSendResponse(['The \'email\' field is incorrect'], 400);
-            die();
-        }
     }
 }
