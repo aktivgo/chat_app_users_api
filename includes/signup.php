@@ -9,6 +9,7 @@ use aktivgo\chat\database\Database;
 $fullName = $_POST['fullName'];
 $login = $_POST['login'];
 $email = $_POST['email'];
+$avatar = null;
 $password = $_POST['password'];
 $passwordConfirm = $_POST['passwordConfirm'];
 
@@ -54,12 +55,21 @@ if ($password != $passwordConfirm) {
     die();
 }
 
+if (isset($_FILES['avatar'])) {
+    $avatar = 'uploads/' . time() . $_FILES['avatar']['name'];
+    if (!move_uploaded_file($_FILES['avatar']['tmp_name'], '../' . $avatar)) {
+        HttpResponse::toSendResponse(['Ошибка при загрузке изображения'], 400);
+        die();
+    }
+}
+
 $password = md5($password);
 
 UserController::addUser($db, [
     'fullName' => $fullName,
     'login' => $login,
     'email' => $email,
+    'avatar' => $avatar,
     'password' => $password,
 ]);
 
