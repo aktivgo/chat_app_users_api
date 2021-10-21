@@ -1,8 +1,5 @@
 <?php
 
-echo 'HI from users_api';
-die();
-
 session_start();
 
 use aktivgo\chat\app\Activation;
@@ -15,6 +12,10 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__ . "/composer/vendor/autoload.php";
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
 try {
     $routeSignin = new Route('/signin');
