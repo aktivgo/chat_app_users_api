@@ -64,7 +64,7 @@ class UserController
             HttpResponse::toSendResponse(['Такой логин уже существует'],406);
         }
 
-        $sth = $db->prepare("insert into users values (null, :firstName, :lastName, :email, :avatar, :password)");
+        $sth = $db->prepare("insert into users values (null,:login, :password, :fullName, :email, false, :avatar)");
         $sth->execute($data);
 
         $id = $db->lastInsertId();
