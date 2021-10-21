@@ -15,11 +15,11 @@ $passwordConfirm = $_POST['passwordConfirm'];
 $db = Database::getConnection();
 
 if (UserController::isLoginExist($db, $login)) {
-    HttpResponse::toSendResponse([
+    echo json_encode([
         'status' => false,
         'message' => 'Такой логин уже существует',
         'fields' => ['login']
-    ], 400);
+    ]);
     die();
 }
 
@@ -38,19 +38,19 @@ if ($passwordConfirm === '') {
 }
 
 if (!empty($errorFields)) {
-    HttpResponse::toSendResponse([
+    echo json_encode([
         'status' => false,
         'message' => 'Проверьте правильность полей',
         'fields' => $errorFields
-    ], 400);
+    ]);
     die();
 }
 
 if ($password != $passwordConfirm) {
-    HttpResponse::toSendResponse([
+    echo json_encode([
         'status' => false,
         'message' => 'Пароли не совпадают'
-    ], 400);
+    ]);
     die();
 }
 
@@ -62,9 +62,3 @@ UserController::addUser($db, [
     'login' => $login,
     'password' => $password
 ]);
-
-
-HttpResponse::toSendResponse([
-    'status' => true,
-    'message' => 'Регистрация прошла успешно'
-    ], 200);

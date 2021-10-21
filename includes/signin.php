@@ -18,11 +18,11 @@ if ($password === '') {
 }
 
 if (!empty($errorFields)) {
-    HttpResponse::toSendResponse([
+    echo json_encode([
         'status' => false,
         'message' => "Проверьте правильность полей",
         'fields' => $errorFields
-    ], 400);
+    ]);
     die();
 }
 
