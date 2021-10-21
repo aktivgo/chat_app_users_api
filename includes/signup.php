@@ -61,6 +61,7 @@ UserController::addUser($db, [
     'fullName' => $fullName,
     'login' => $login,
     'email' => $email,
+    'avatar' => $avatar,
     'password' => $password,
 ]);
 
