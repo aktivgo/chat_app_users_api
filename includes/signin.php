@@ -5,6 +5,7 @@ session_start();
 use aktivgo\chat\database\Database;
 use aktivgo\chat\app\HttpResponse;
 use aktivgo\chat\app\UserController;
+use Firebase\JWT\JWT;
 
 $login = $_POST['login'];
 $password = $_POST['password'];
@@ -38,5 +39,6 @@ $_SESSION['user'] = [
 
 HttpResponse::toSendResponse([
     'status' => true,
+    'token' => JWT::encode($user['id'], $_ENV['KEY'], 'HS256'),
     'message' => 'Вход выполнен успешно'
     ], 200);

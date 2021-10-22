@@ -3,7 +3,9 @@
 session_start();
 
 use aktivgo\chat\app\HttpResponse;
+use aktivgo\chat\app\UserController;
 use aktivgo\chat\database\Database;
+use Firebase\JWT\JWT;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
@@ -20,11 +22,13 @@ try {
     $routeSignin = new Route('/signin');
     $routeSignup = new Route('/signup');
     $routeLogout = new Route('/logout');
+    $routeAuthorization= new Route('/authorization');
 
     $routes = new RouteCollection();
     $routes->add('signin', $routeSignin);
     $routes->add('signup', $routeSignup);
     $routes->add('logout', $routeLogout);
+    $routes->add('authorization', $routeAuthorization);
 
     $context = new RequestContext();
     $context->fromRequest(Request::createFromGlobals());
@@ -53,5 +57,11 @@ if($parameters['_route'] === 'signup') {
 
 if($parameters['_route'] === 'logout') {
     require_once 'includes/logout.php';
+    return;
+}
+
+if($parameters['_route'] === 'authorization') {
+    $id = JWT::decode($_POST['token'], $_ENV['KEY'], ['HS256']);
+    UserController::getUserById($db, $id);
     return;
 }
