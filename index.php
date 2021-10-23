@@ -46,17 +46,17 @@ try {
 $db = Database::getConnection();
 
 if($parameters['_route'] === 'signin') {
-    require_once 'includes/signin.php';
+    require_once 'includes/signIn.php';
     return;
 }
 
 if($parameters['_route'] === 'signup') {
-    require_once 'includes/signup.php';
+    require_once 'includes/signUp.php';
     return;
 }
 
 if($parameters['_route'] === 'logout') {
-    require_once 'includes/logout.php';
+    require_once 'includes/logOut.php';
     return;
 }
 
