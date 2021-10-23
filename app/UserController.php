@@ -49,10 +49,11 @@ class UserController
         $res = $sth->fetch(PDO::FETCH_ASSOC);
 
         if (!$res) {
-            HttpResponse::toSendResponse([
+            echo json_encode([
                 'status' => false,
-                'message' => 'Неверный логин или пароль'
-            ], 404);
+                'message' => "Неверный логин или пароль",
+                'fields' => ['login', 'password']
+            ]);
             die();
         }
         return $res;
