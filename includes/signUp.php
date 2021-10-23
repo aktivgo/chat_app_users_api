@@ -56,16 +56,15 @@ if ($password != $passwordConfirm) {
 }
 
 if (isset($_FILES['avatar'])) {
-    var_dump($_FILES);
-    die();
+    /*var_dump($_FILES);
+    die();*/
     $path = 'uploads/' . time() . $_FILES['avatar']['name'];
     if (!move_uploaded_file($_FILES['avatar']['tmp_name'], '../' . $path)) {
-        $response = [
+        echo json_encode([
             'status' => false,
             'message' => 'Ошибка при загрузке изображения',
             'fields' => []
-        ];
-        echo json_encode($response);
+        ]);
         die();
     }
 }
