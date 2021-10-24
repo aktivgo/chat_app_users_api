@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 use aktivgo\chat\app\HttpResponse;
 use aktivgo\chat\app\UserController;
 use aktivgo\chat\database\Database;
@@ -52,11 +50,6 @@ if($parameters['_route'] === 'signin') {
 
 if($parameters['_route'] === 'signup') {
     require_once 'includes/signUp.php';
-    return;
-}
-
-if($parameters['_route'] === 'logout') {
-    require_once 'includes/logOut.php';
     return;
 }
 

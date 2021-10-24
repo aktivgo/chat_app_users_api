@@ -1,8 +1,5 @@
 <?php
 
-session_start();
-
-use aktivgo\chat\app\HttpResponse;
 use aktivgo\chat\app\UserController;
 use aktivgo\chat\database\Database;
 
@@ -56,8 +53,6 @@ if ($password != $passwordConfirm) {
 }
 
 if (isset($_FILES['avatar'])) {
-    /*var_dump($_FILES);
-    die();*/
     $path = 'uploads/' . time() . $_FILES['avatar']['name'];
     if (!move_uploaded_file($_FILES['avatar']['tmp_name'], '../' . $path)) {
         echo json_encode([
