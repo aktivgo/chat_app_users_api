@@ -19,13 +19,11 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 try {
     $routeSignin = new Route('/signin');
     $routeSignup = new Route('/signup');
-    $routeLogout = new Route('/logout');
     $routeAuthorization= new Route('/authorization');
 
     $routes = new RouteCollection();
     $routes->add('signin', $routeSignin);
     $routes->add('signup', $routeSignup);
-    $routes->add('logout', $routeLogout);
     $routes->add('authorization', $routeAuthorization);
 
     $context = new RequestContext();
