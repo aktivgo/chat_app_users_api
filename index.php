@@ -52,7 +52,7 @@ if($parameters['_route'] === 'signup') {
 }
 
 if($parameters['_route'] === 'authorization') {
-    $id = JWT::decode($_POST['token'], $_ENV['KEY'], ['HS256']);
-    UserController::getUserById($db, $id);
+    $jwt = JWT::decode($_POST['token'], $_ENV['PRIVATE_KEY'], ['HS256']);
+    UserController::getUserById($db, $jwt->userId);
     return;
 }

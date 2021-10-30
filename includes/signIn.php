@@ -31,6 +31,6 @@ $user = UserController::getUserByLoginAndPassword($db, $login, $password);
 
 HttpResponse::toSendResponse([
     'status' => true,
-    'token' => JWT::encode($user['id'], $_ENV['KEY'], 'HS256'),
+    'token' => JWT::encode(['userId' => $user['id'], 'userName' => $user['fullName']], $_ENV['PRIVATE_KEY'], 'HS256'),
     'message' => 'Вход выполнен успешно'
     ], 200);
