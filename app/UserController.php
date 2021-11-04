@@ -62,7 +62,7 @@ class UserController
     // Добавляет пользователя в БД
     public static function addUser(PDO $db, ?array $data)
     {
-        $sth = $db->prepare("insert into users values (null,:fullName, :avatar, :login, :password)");
+        $sth = $db->prepare("insert into users values (null, :fullName, :login, :password)");
         $sth->execute($data);
 
         HttpResponse::toSendResponse([

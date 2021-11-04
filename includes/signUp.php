@@ -4,7 +4,6 @@ use aktivgo\chat\app\UserController;
 use aktivgo\chat\database\Database;
 
 $fullName = $_POST['fullName'];
-$avatar = null;
 $login = $_POST['login'];
 $password = $_POST['password'];
 $passwordConfirm = $_POST['passwordConfirm'];
@@ -52,23 +51,10 @@ if ($password != $passwordConfirm) {
     die();
 }
 
-if (isset($_FILES['avatar'])) {
-    $path = 'uploads/' . time() . $_FILES['avatar']['name'];
-    if (!move_uploaded_file($_FILES['avatar']['tmp_name'], '../' . $path)) {
-        echo json_encode([
-            'status' => false,
-            'message' => 'Ошибка при загрузке изображения',
-            'fields' => []
-        ]);
-        die();
-    }
-}
-
 $password = md5($password);
 
 UserController::addUser($db, [
     'fullName' => $fullName,
-    'avatar' => $avatar,
     'login' => $login,
     'password' => $password
 ]);
