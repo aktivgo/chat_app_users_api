@@ -17,9 +17,9 @@ header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
 try {
-    $routeSignin = new Route('/signin');
-    $routeSignup = new Route('/signup');
-    $routeAuthorization= new Route('/authorization');
+    $routeSignin = new Route('/users_api/signin');
+    $routeSignup = new Route('/users_api/signup');
+    $routeAuthorization= new Route('/users_api/authorization');
 
     $routes = new RouteCollection();
     $routes->add('signin', $routeSignin);
